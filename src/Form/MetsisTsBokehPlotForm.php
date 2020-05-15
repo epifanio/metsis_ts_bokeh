@@ -58,7 +58,7 @@ class MetsisTsBokehPlotForm extends FormBase {
   \Drupal::logger('metsis_ts_bokeh')->debug('buildForm: yaxis form_state is: ' . $form_state->getValue('y_axis'));
   $isinit = $tempstore->get('isinit');
 
-  $element['hello'] = '<p>hello</p>';
+  //$element['hello'] = '<p>hello</p>';
 
 
  /*
@@ -70,6 +70,41 @@ class MetsisTsBokehPlotForm extends FormBase {
   $form['#attached']['library'][] = 'metsis_ts_bokeh/bokeh_tables';
   $form['#attached']['library'][] = 'metsis_ts_bokeh/bokeh_api';
 
+
+/* We display the form above the plot with subit button on top */
+/*$form['actions'] = [
+  '#type' => 'actions',
+];*/
+$form['submit'] = [
+  '#type' => 'button',
+  '#value' => t('Plot'),
+  '#ajax' => [
+    'callback' => '::getPlotData',
+  ],
+];
+
+$default_x_axis = "no default set";
+$form['x_axis'] = [
+  '#type' => 'select',
+  '#options' => ['time' => 'time'],
+  '#default_value' => $default_x_axis,
+  '#description' => t(''),
+  '#empty' => t(''),
+];
+$default_y_axis = "no default set";
+
+$form['y_axis'] = [
+  '#type' => 'select',
+  '#options' => adc_get_ts_bokeh_plot_y_vars(),
+  '#default_value' => $form_state->get('y_axis'),
+  '#description' => t(''),
+  '#empty' => t(''),
+];
+
+$form['items'] = [
+  '#type' => 'value',
+  '#value' => t('This is my stored value'),
+];
   /*
    * Here we will display the plot
    */
@@ -87,38 +122,7 @@ class MetsisTsBokehPlotForm extends FormBase {
     ];
   }
 
-  $default_x_axis = "no default set";
-  $form['x_axis'] = [
-    '#type' => 'select',
-    '#options' => ['time' => 'time'],
-    '#default_value' => $default_x_axis,
-    '#description' => t(''),
-    '#empty' => t(''),
-  ];
-  $default_y_axis = "no default set";
 
-  $form['y_axis'] = [
-    '#type' => 'select',
-    '#options' => adc_get_ts_bokeh_plot_y_vars(),
-    '#default_value' => $form_state->get('y_axis'),
-    '#description' => t(''),
-    '#empty' => t(''),
-  ];
-  $form['actions'] = [
-    '#type' => 'actions',
-  ];
-  $form['actions']['submit'] = [
-    '#type' => 'button',
-    '#value' => t('Plot'),
-    '#ajax' => [
-      'callback' => '::getPlotData',
-    ],
-  ];
-
-  $form['items'] = [
-    '#type' => 'value',
-    '#value' => t('This is my stored value'),
-  ];
 
   $tempstore->set('isinit', false);
 
