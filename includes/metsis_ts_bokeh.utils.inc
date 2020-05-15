@@ -95,6 +95,15 @@ function adc_get_ts_bokeh_plot_y_vars() {
 
   $ts_bokeh_plot_vars = adc_get_ts_bokeh_plot_vars($data_uri);
   $y_vars = $ts_bokeh_plot_vars['y_axis'];
+  
+  /* the if statment below temporary handles the new plotting API 
+  * to support the plotting of vertical profiles
+  * in such case the get 'adc_get_ts_bokeh_plot_vars' will return 'x_axis' instead of 'y_axis'
+  * based on the NetCDF dimension 
+  */
+  if(empty($y_vars))
+      $y_vars = $ts_bokeh_plot_vars['x_axis'];
+  
   ksort($y_vars);
   $hy_vars = [];
   foreach ($y_vars as $yv) {
