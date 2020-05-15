@@ -110,5 +110,5 @@ function adc_get_ts_bokeh_plot_y_vars() {
     $hy_vars[$yv] = $yv;
   }
   return ($hy_vars);
-
+  unset($y_vars);
 }
